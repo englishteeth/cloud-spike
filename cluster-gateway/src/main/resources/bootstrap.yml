@@ -1,11 +1,3 @@
 spring:
   application:
     name: cluster-gateway
-  cloud:
-    config:
-      discovery:
-        enabled: true          
-        service-id: cluster-configuration
-
-encrypt:
-  failOnError: false       

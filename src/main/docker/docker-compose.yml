@@ -1,0 +1,45 @@
+version: '2'
+services:
+  cluster-configuration:
+    image: englishteeth/cluster-configuration
+    ports:
+     - "8888:8888"
+    environment:
+      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/englishteeth/cloud-spike-configuration
+
+  cluster-discovery:
+    image: englishteeth/cluster-discovery
+    ports:
+     - "8761:8761"
+    environment:
+      DEPLOY_HOST: inf-host
+      SPRING_CLOUD_CONFIG_URI: http://inf-host:8888
+
+  cluster-gateway:
+    image: englishteeth/cluster-gateway
+    ports:
+     - "10000:10000"
+     - "8000:8000"
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://inf-host:8888
+
+  service-alpha:
+    image: englishteeth/service-alpha
+    ports:
+     - "9000:9000"
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://inf-host:8888
+
+  service-beta:
+    image: englishteeth/service-beta
+    ports:
+     - "9000:9000"
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://inf-host:8888
+
+  infrastructure:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - cluster-configuration
+      - cluster-discovery
+    command: cluster-configuration:8888 cluster-discovery:8761

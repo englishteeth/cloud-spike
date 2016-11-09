@@ -1,11 +1,3 @@
 spring:
   application:
     name: service-beta
-  cloud:
-    config:
-      discovery:
-        enabled: true
-        service-id: service-configuration
-
-encrypt:
-  failOnError: false
